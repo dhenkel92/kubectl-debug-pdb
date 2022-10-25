@@ -24,6 +24,8 @@ type PDBOptions struct {
 	PodName       string
 	Output        string
 	Template      string
+
+	SortBy string
 }
 
 func NewPDBOptions(streams genericclioptions.IOStreams) *PDBOptions {
@@ -85,6 +87,12 @@ func (o *PDBOptions) Validate() error {
 	default:
 		return fmt.Errorf("invalid output '%s'", o.Output)
 	}
+
+	switch o.SortBy {
+	case "name", "count":
+	default:
+		return fmt.Errorf("invalid sort value '%s', should be one of [name, count]", o.SortBy)
+	}
 	return nil
 }
 
@@ -130,6 +138,10 @@ func (o *PDBOptions) Run() error {
 	}
 
 	lst := &PodPDBList{Items: entries}
+	if err := lst.sortBy(o.SortBy); err != nil {
+		return err
+	}
+
 	w := o.getWriter()
 	if err := printer.PrintObj(lst.toMetaTable(), w); err != nil {
 		return err
@@ -161,6 +173,7 @@ func NewCmdPdb(streams genericclioptions.IOStreams) *cobra.Command {
 	flags := cmd.Flags()
 	flags.BoolVarP(&o.AllNamespaces, "all-namespaces", "a", false, "")
 	flags.StringVarP(&o.Output, "output", "o", "human", "[human, json, yaml, jsonpath]")
+	flags.StringVar(&o.SortBy, "sort-by", "name", "[name, count]")
 	o.configFlags.AddFlags(flags)
 
 	return cmd
