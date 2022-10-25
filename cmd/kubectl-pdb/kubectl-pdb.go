@@ -3,7 +3,7 @@ package main
 import (
 	"os"
 
-	"github.com/dhenkel92/kubectl-pdb/pkg/cmd"
+	"github.com/dhenkel92/kubectl-utils/pkg/cmd"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 	"k8s.io/cli-runtime/pkg/genericclioptions"
