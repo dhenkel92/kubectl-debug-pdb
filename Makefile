@@ -2,4 +2,4 @@ ARGS=
 
 .PHONY: run
 run:
-	go run ./cmd/ cover ${ARGS}
+	go run ./cmd/kubectl-pdb/ cover ${ARGS}
