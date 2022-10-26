@@ -1,0 +1,60 @@
+name: Main
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  style:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3.1.0
+        with:
+          fetch-depth: 0
+      - name: Set up Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: 1.18
+      - uses: actions/setup-python@v4.3.0
+        with:
+          python-version: '3.10'
+      - name: Install required GO libs
+        run: |
+          go mod download
+          go install github.com/fzipp/gocyclo/cmd/gocyclo@latest
+      - uses: pre-commit/action@v3.0.0
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3.1.0
+        with:
+          fetch-depth: 0
+      - name: Set up Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: 1.18
+      - name: Test
+        run: make test
+  release:
+    runs-on: ubuntu-latest
+    needs:
+      - test
+      - style
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3.1.0
+        with:
+          fetch-depth: 0
+      - name: Set up Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: 1.18
+      - name: Run GoReleaser
+        uses: goreleaser/goreleaser-action@v3.2.0
+        with:
+          version: latest
+          args: release --rm-dist --skip-validate --skip-publish

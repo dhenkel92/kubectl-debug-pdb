@@ -1,0 +1,49 @@
+project_name: kubectl-utils
+before:
+  hooks:
+    # You may remove this if you don't use go modules.
+    - go mod download
+builds:
+  - env:
+      - CGO_ENABLED=0
+    main: ./cmd/kubectl-pdb/kubectl-pdb.go
+    id: kubectl-pdb
+    binary: kubectl-pdb
+    goos:
+      - linux
+      - windows
+      - darwin
+archives:
+  - name_template: "kubectl-pdb_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+    id: kubectl-pdb
+    replacements:
+      darwin: Darwin
+      linux: Linux
+      windows: Windows
+      386: i386
+      amd64: x86_64
+    builds:
+      - kubectl-pdb
+checksum:
+  name_template: 'checksums.txt'
+snapshot:
+  name_template: "{{ .Tag }}-next"
+brews:
+  - tap:
+      owner: dhenkel92
+      name: homebrew-tap
+      token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
+    folder: Formula
+    name: kubectl-pdb
+    ids:
+      - kubectl-pdb
+    homepage: https://github.com/dhenkel92/kubectl-utils
+    description: Kubernetes kubectl utils
+    test: |
+      system "#{bin}/kubectl-pdb -h"
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - '^docs:'
+      - '^test:'
