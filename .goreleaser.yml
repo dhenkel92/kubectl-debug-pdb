@@ -28,19 +28,19 @@ checksum:
   name_template: 'checksums.txt'
 snapshot:
   name_template: "{{ .Tag }}-next"
-# brews:
-  # - tap:
-      # owner: dhenkel92
-      # name: homebrew-tap
-      # token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
-    # folder: Formula
-    # name: kubectl-pdb
-    # ids:
-      # - kubectl-pdb
-    # homepage: https://github.com/dhenkel92/kubectl-utils
-    # description: Kubernetes kubectl utils
-    # test: |
-      # system "#{bin}/kubectl-pdb -h"
+brews:
+  - tap:
+      owner: dhenkel92
+      name: homebrew-tap
+      token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
+    folder: Formula
+    name: kubectl-pdb
+    ids:
+      - kubectl-pdb
+    homepage: https://github.com/dhenkel92/kubectl-utils
+    description: Kubernetes kubectl utils
+    test: |
+      system "#{bin}/kubectl-pdb -h"
 changelog:
   sort: asc
   filters:
