@@ -24,3 +24,11 @@ func (c *Clients) GetNamespacedPDBs(ns string) (map[string][]policyv1.PodDisrupt
 
 	return pdbRes, nil
 }
+
+func NewPDB(ls *metav1.LabelSelector) policyv1.PodDisruptionBudget {
+	var pdb policyv1.PodDisruptionBudget
+
+	pdb.Spec.Selector = ls
+
+	return pdb
+}

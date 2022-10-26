@@ -31,6 +31,19 @@ func (c *Clients) GetNamespacedPods(ns, podName string) (map[string][]corev1.Pod
 	return podRes, nil
 }
 
-func (c *Clients) GetPodParent(podName string) (metav1.Object, error) {
+func (c *Clients) GetPodParent(podName, ns string) (metav1.Object, error) {
+	cs := c.GetClientset()
+	pod, err := cs.CoreV1().Pods(ns).Get(context.Background(), podName, metav1.GetOptions{})
+	if err != nil {
+		return nil, err
+	}
+
+	// if there is now owner, the pod is probably standalone
+	if len(pod.GetOwnerReferences()) == 0 {
+		return pod, nil
+	}
+
+	// owner := pod.GetOwnerReferences()[0]
+
 	return nil, nil
 }
