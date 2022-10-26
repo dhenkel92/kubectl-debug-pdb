@@ -6,6 +6,7 @@ import (
 	"github.com/dhenkel92/kubectl-utils/pkg/utils"
 	policyv1 "k8s.io/api/policy/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 )
 
 func (c *Clients) GetNamespacedPDBs(ns string) (map[string][]policyv1.PodDisruptionBudget, error) {
@@ -26,13 +27,24 @@ func (c *Clients) GetNamespacedPDBs(ns string) (map[string][]policyv1.PodDisrupt
 	return pdbRes, nil
 }
 
-func NewPDB(workload metav1.Object, ls *metav1.LabelSelector) policyv1.PodDisruptionBudget {
+func NewPDB(workload *unstructured.Unstructured, ls *metav1.LabelSelector) policyv1.PodDisruptionBudget {
 	var pdb policyv1.PodDisruptionBudget
+	falseVar := false
 
 	pdb.ObjectMeta.Name = utils.UniqueName(workload.GetName())
 	pdb.ObjectMeta.Namespace = workload.GetNamespace()
 	pdb.Spec.Selector = ls
 	pdb.GetObjectKind().SetGroupVersionKind(policyv1.SchemeGroupVersion.WithKind("PodDisruptionBudget"))
+	pdb.OwnerReferences = []metav1.OwnerReference{
+		{
+			Kind:               workload.GetKind(),
+			APIVersion:         workload.GetAPIVersion(),
+			Name:               workload.GetName(),
+			Controller:         &falseVar,
+			BlockOwnerDeletion: &falseVar,
+			UID:                workload.GetUID(),
+		},
+	}
 
 	return pdb
 }
