@@ -12,4 +12,4 @@ test:
 
 .PHONY: run
 run:
-	go run ./cmd/kubectl-pdb/ cover ${ARGS}
+	go run ./cmd/kubectl-pdb/ ${ARGS}

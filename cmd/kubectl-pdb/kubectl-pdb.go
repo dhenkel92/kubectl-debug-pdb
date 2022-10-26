@@ -18,6 +18,7 @@ func main() {
 		Short: "Utility to work with pod disruption budgets",
 	}
 	rootCmd.AddCommand(cmd.NewCmdPdb(genericclioptions.IOStreams{In: os.Stdin, Out: os.Stdout, ErrOut: os.Stderr}))
+	rootCmd.AddCommand(cmd.NewCmdCreatePDB(genericclioptions.IOStreams{In: os.Stdin, Out: os.Stdout, ErrOut: os.Stderr}))
 
 	if err := rootCmd.Execute(); err != nil {
 		os.Exit(1)
