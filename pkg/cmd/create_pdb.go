@@ -2,12 +2,15 @@ package cmd
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/dhenkel92/kubectl-utils/pkg/kube"
 	"github.com/dhenkel92/kubectl-utils/pkg/utils"
+	"github.com/liggitt/tabwriter"
 	"github.com/spf13/cobra"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	"k8s.io/cli-runtime/pkg/genericclioptions"
+	"k8s.io/cli-runtime/pkg/printers"
 	"k8s.io/cli-runtime/pkg/resource"
 )
 
@@ -16,6 +19,7 @@ type CreatePDBOptions struct {
 
 	configFlags *genericclioptions.ConfigFlags
 	namespace   string
+	output      string
 
 	workloadName string
 	workload     *resource.Info
@@ -30,8 +34,23 @@ func NewCreatePDBOptions(streams genericclioptions.IOStreams) *CreatePDBOptions 
 	}
 }
 
+func (o *CreatePDBOptions) GetPrinter() (printers.ResourcePrinter, error) {
+	switch o.output {
+	case "json":
+		return &printers.JSONPrinter{}, nil
+	case "yaml":
+		return &printers.YAMLPrinter{}, nil
+	}
+	return nil, fmt.Errorf("'%s' output is not supported", o.output)
+}
+
+func (o *CreatePDBOptions) getWriter() *tabwriter.Writer {
+	return printers.GetNewTabWriter(o.Out)
+}
+
 func (o *CreatePDBOptions) Complete(cmd *cobra.Command, args []string) error {
 	o.workloadName = args[0]
+	o.output = strings.Trim(o.output, " ")
 
 	var err error
 	o.namespace, _, err = o.configFlags.ToRawKubeConfigLoader().Namespace()
@@ -95,8 +114,16 @@ func (o *CreatePDBOptions) Run() error {
 		return err
 	}
 
-	pdb := kube.NewPDB(ls)
-	fmt.Println(pdb)
+	pdb := kube.NewPDB(unstructured, ls)
+	if o.output == "human" {
+		fmt.Fprintf(o.Out, "poddisruptionbudget/%s created\n", pdb.GetName())
+	} else {
+		printer, err := o.GetPrinter()
+		if err != nil {
+			return err
+		}
+		return printer.PrintObj(&pdb, o.getWriter())
+	}
 	return nil
 }
 
@@ -129,6 +156,7 @@ func NewCmdCreatePDB(streams genericclioptions.IOStreams) *cobra.Command {
 	}
 
 	flags := cmd.Flags()
+	flags.StringVarP(&o.output, "output", "o", "human", "")
 	o.configFlags.AddFlags(flags)
 
 	return cmd

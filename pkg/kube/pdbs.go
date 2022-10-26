@@ -3,6 +3,7 @@ package kube
 import (
 	"context"
 
+	"github.com/dhenkel92/kubectl-utils/pkg/utils"
 	policyv1 "k8s.io/api/policy/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
@@ -25,10 +26,13 @@ func (c *Clients) GetNamespacedPDBs(ns string) (map[string][]policyv1.PodDisrupt
 	return pdbRes, nil
 }
 
-func NewPDB(ls *metav1.LabelSelector) policyv1.PodDisruptionBudget {
+func NewPDB(workload metav1.Object, ls *metav1.LabelSelector) policyv1.PodDisruptionBudget {
 	var pdb policyv1.PodDisruptionBudget
 
+	pdb.ObjectMeta.Name = utils.UniqueName(workload.GetName())
+	pdb.ObjectMeta.Namespace = workload.GetNamespace()
 	pdb.Spec.Selector = ls
+	pdb.GetObjectKind().SetGroupVersionKind(policyv1.SchemeGroupVersion.WithKind("PodDisruptionBudget"))
 
 	return pdb
 }
