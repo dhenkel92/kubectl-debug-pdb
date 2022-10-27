@@ -9,6 +9,7 @@ import (
 	"github.com/liggitt/tabwriter"
 	"github.com/spf13/cobra"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
+	"k8s.io/apimachinery/pkg/util/intstr"
 	"k8s.io/cli-runtime/pkg/genericclioptions"
 	"k8s.io/cli-runtime/pkg/printers"
 	"k8s.io/cli-runtime/pkg/resource"
@@ -17,9 +18,13 @@ import (
 type CreatePDBOptions struct {
 	genericclioptions.IOStreams
 
-	configFlags *genericclioptions.ConfigFlags
-	namespace   string
-	output      string
+	configFlags   *genericclioptions.ConfigFlags
+	namespace     string
+	output        string
+	minAvail      *intstr.IntOrString
+	minAvailStr   string
+	maxUnavail    *intstr.IntOrString
+	maxUnavailStr string
 
 	workloadName string
 	workload     *resource.Info
@@ -80,6 +85,16 @@ func (o *CreatePDBOptions) Complete(cmd *cobra.Command, args []string) error {
 	}
 	o.workload = infos[0]
 
+	if o.minAvailStr != "" {
+		o.minAvail = utils.StrToIntOrString(o.minAvailStr)
+	}
+	if o.maxUnavailStr != "" {
+		o.maxUnavail = utils.StrToIntOrString(o.maxUnavailStr)
+	}
+	if o.maxUnavail == nil && o.minAvail == nil {
+		o.minAvail = utils.StrToIntOrString("1")
+	}
+
 	return nil
 }
 
@@ -89,6 +104,9 @@ func (o *CreatePDBOptions) Validate() error {
 	}
 	if !isSupportedWorkload(o.workload) {
 		return fmt.Errorf("workload is not supported")
+	}
+	if o.minAvail != nil && o.maxUnavail != nil {
+		return fmt.Errorf("you can either set min-available or max-available")
 	}
 
 	return nil
@@ -114,7 +132,7 @@ func (o *CreatePDBOptions) Run() error {
 		return err
 	}
 
-	pdb := kube.NewPDB(unstructured, ls)
+	pdb := kube.NewPDB(unstructured, ls, o.minAvail, o.maxUnavail)
 	if o.output == "human" {
 		fmt.Fprintf(o.Out, "poddisruptionbudget/%s created\n", pdb.GetName())
 	} else {
@@ -157,6 +175,8 @@ func NewCmdCreatePDB(streams genericclioptions.IOStreams) *cobra.Command {
 
 	flags := cmd.Flags()
 	flags.StringVarP(&o.output, "output", "o", "human", "")
+	flags.StringVar(&o.minAvailStr, "min-avail", "", "")
+	flags.StringVar(&o.maxUnavailStr, "max-unavail", "", "")
 	o.configFlags.AddFlags(flags)
 
 	return cmd

@@ -7,6 +7,7 @@ import (
 	policyv1 "k8s.io/api/policy/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
+	"k8s.io/apimachinery/pkg/util/intstr"
 )
 
 func (c *Clients) GetNamespacedPDBs(ns string) (map[string][]policyv1.PodDisruptionBudget, error) {
@@ -27,7 +28,7 @@ func (c *Clients) GetNamespacedPDBs(ns string) (map[string][]policyv1.PodDisrupt
 	return pdbRes, nil
 }
 
-func NewPDB(workload *unstructured.Unstructured, ls *metav1.LabelSelector) policyv1.PodDisruptionBudget {
+func NewPDB(workload *unstructured.Unstructured, ls *metav1.LabelSelector, minAvail, maxUnavail *intstr.IntOrString) policyv1.PodDisruptionBudget {
 	var pdb policyv1.PodDisruptionBudget
 	falseVar := false
 
@@ -45,6 +46,8 @@ func NewPDB(workload *unstructured.Unstructured, ls *metav1.LabelSelector) polic
 			UID:                workload.GetUID(),
 		},
 	}
+	pdb.Spec.MinAvailable = minAvail
+	pdb.Spec.MaxUnavailable = maxUnavail
 
 	return pdb
 }
