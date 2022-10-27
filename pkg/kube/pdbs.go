@@ -28,14 +28,13 @@ func (c *Clients) GetNamespacedPDBs(ns string) (map[string][]policyv1.PodDisrupt
 	return pdbRes, nil
 }
 
-func NewPDB(workload *unstructured.Unstructured, ls *metav1.LabelSelector, minAvail, maxUnavail *intstr.IntOrString) policyv1.PodDisruptionBudget {
+func NewPDB(workload *unstructured.Unstructured, ls *metav1.LabelSelector, minAvail, maxUnavail *intstr.IntOrString) *policyv1.PodDisruptionBudget {
 	var pdb policyv1.PodDisruptionBudget
 	falseVar := false
 
 	pdb.ObjectMeta.Name = utils.UniqueName(workload.GetName())
 	pdb.ObjectMeta.Namespace = workload.GetNamespace()
 	pdb.Spec.Selector = ls
-	pdb.GetObjectKind().SetGroupVersionKind(policyv1.SchemeGroupVersion.WithKind("PodDisruptionBudget"))
 	pdb.OwnerReferences = []metav1.OwnerReference{
 		{
 			Kind:               workload.GetKind(),
@@ -49,5 +48,5 @@ func NewPDB(workload *unstructured.Unstructured, ls *metav1.LabelSelector, minAv
 	pdb.Spec.MinAvailable = minAvail
 	pdb.Spec.MaxUnavailable = maxUnavail
 
-	return pdb
+	return &pdb
 }

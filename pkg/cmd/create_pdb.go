@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"context"
 	"fmt"
 	"strings"
 
@@ -8,6 +9,8 @@ import (
 	"github.com/dhenkel92/kubectl-utils/pkg/utils"
 	"github.com/liggitt/tabwriter"
 	"github.com/spf13/cobra"
+	policyv1 "k8s.io/api/policy/v1"
+	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	"k8s.io/apimachinery/pkg/util/intstr"
 	"k8s.io/cli-runtime/pkg/genericclioptions"
@@ -18,9 +21,11 @@ import (
 type CreatePDBOptions struct {
 	genericclioptions.IOStreams
 
-	configFlags   *genericclioptions.ConfigFlags
-	namespace     string
-	output        string
+	configFlags *genericclioptions.ConfigFlags
+	namespace   string
+	output      string
+	dryRun      bool
+
 	minAvail      *intstr.IntOrString
 	minAvailStr   string
 	maxUnavail    *intstr.IntOrString
@@ -133,6 +138,16 @@ func (o *CreatePDBOptions) Run() error {
 	}
 
 	pdb := kube.NewPDB(unstructured, ls, o.minAvail, o.maxUnavail)
+	if !o.dryRun {
+		pdb, err = o.clients.GetClientset().PolicyV1().PodDisruptionBudgets(o.namespace).Create(context.Background(), pdb, v1.CreateOptions{})
+		if err != nil {
+			return err
+		}
+	}
+
+	// we have to set the group version kind, so that the printer can do it's job
+	// missing apiVersion or kind; try GetObjectKind().SetGroupVersionKind() if you know the type
+	pdb.GetObjectKind().SetGroupVersionKind(policyv1.SchemeGroupVersion.WithKind("PodDisruptionBudget"))
 	if o.output == "human" {
 		fmt.Fprintf(o.Out, "poddisruptionbudget/%s created\n", pdb.GetName())
 	} else {
@@ -140,8 +155,9 @@ func (o *CreatePDBOptions) Run() error {
 		if err != nil {
 			return err
 		}
-		return printer.PrintObj(&pdb, o.getWriter())
+		return printer.PrintObj(pdb, o.getWriter())
 	}
+
 	return nil
 }
 
@@ -177,6 +193,7 @@ func NewCmdCreatePDB(streams genericclioptions.IOStreams) *cobra.Command {
 	flags.StringVarP(&o.output, "output", "o", "human", "")
 	flags.StringVar(&o.minAvailStr, "min-avail", "", "")
 	flags.StringVar(&o.maxUnavailStr, "max-unavail", "", "")
+	flags.BoolVar(&o.dryRun, "dry-run", false, "")
 	o.configFlags.AddFlags(flags)
 
 	return cmd
