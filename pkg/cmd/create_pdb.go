@@ -59,7 +59,6 @@ func (o *CreatePDBOptions) getWriter() *tabwriter.Writer {
 }
 
 func (o *CreatePDBOptions) Complete(cmd *cobra.Command, args []string) error {
-	o.workloadName = args[0]
 	o.output = strings.Trim(o.output, " ")
 
 	var err error
@@ -73,6 +72,7 @@ func (o *CreatePDBOptions) Complete(cmd *cobra.Command, args []string) error {
 		return err
 	}
 
+	o.workloadName = args[0]
 	r := o.clients.NewBuilder().
 		Unstructured().
 		ContinueOnError().
@@ -148,7 +148,7 @@ func (o *CreatePDBOptions) Run() error {
 	// we have to set the group version kind, so that the printer can do it's job
 	// missing apiVersion or kind; try GetObjectKind().SetGroupVersionKind() if you know the type
 	pdb.GetObjectKind().SetGroupVersionKind(policyv1.SchemeGroupVersion.WithKind("PodDisruptionBudget"))
-	if o.output == "human" {
+	if o.output == "name" {
 		fmt.Fprintf(o.Out, "poddisruptionbudget/%s created\n", pdb.GetName())
 	} else {
 		printer, err := o.GetPrinter()
@@ -190,10 +190,10 @@ func NewCmdCreatePDB(streams genericclioptions.IOStreams) *cobra.Command {
 	}
 
 	flags := cmd.Flags()
-	flags.StringVarP(&o.output, "output", "o", "human", "")
-	flags.StringVar(&o.minAvailStr, "min-avail", "", "")
-	flags.StringVar(&o.maxUnavailStr, "max-unavail", "", "")
-	flags.BoolVar(&o.dryRun, "dry-run", false, "")
+	flags.StringVarP(&o.output, "output", "o", "name", "Output format. One of: (name, json, yaml)")
+	flags.StringVar(&o.minAvailStr, "min-avail", "", "Minimum amount of available pods. Will be 1 if nothing else was set.")
+	flags.StringVar(&o.maxUnavailStr, "max-unavail", "", "Maximum amount of unavailable Pods.")
+	flags.BoolVar(&o.dryRun, "dry-run", false, "If set to true, it will only print the object, without sending it.")
 	o.configFlags.AddFlags(flags)
 
 	return cmd
