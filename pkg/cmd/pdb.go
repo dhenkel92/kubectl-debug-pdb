@@ -18,7 +18,7 @@ import (
 type PDBOptions struct {
 	genericclioptions.IOStreams
 
-	configFlags   *genericclioptions.ConfigFlags
+	configFlags   genericclioptions.RESTClientGetter
 	AllNamespaces bool
 	Namespace     string
 	PodName       string
@@ -28,9 +28,9 @@ type PDBOptions struct {
 	SortBy string
 }
 
-func NewPDBOptions(streams genericclioptions.IOStreams) *PDBOptions {
+func NewPDBOptions(streams genericclioptions.IOStreams, conf genericclioptions.RESTClientGetter) *PDBOptions {
 	return &PDBOptions{
-		configFlags: genericclioptions.NewConfigFlags(true),
+		configFlags: conf,
 		IOStreams:   streams,
 	}
 }
@@ -149,8 +149,8 @@ func (o *PDBOptions) Run() error {
 	return w.Flush()
 }
 
-func NewCmdPdb(streams genericclioptions.IOStreams) *cobra.Command {
-	o := NewPDBOptions(streams)
+func NewCmdPdb(streams genericclioptions.IOStreams, conf genericclioptions.RESTClientGetter) *cobra.Command {
+	o := NewPDBOptions(streams, conf)
 
 	cmd := &cobra.Command{
 		Use:   "cover [pod name]",
@@ -174,7 +174,6 @@ func NewCmdPdb(streams genericclioptions.IOStreams) *cobra.Command {
 	flags.BoolVarP(&o.AllNamespaces, "all-namespaces", "a", false, "")
 	flags.StringVarP(&o.Output, "output", "o", "human", "[human, json, yaml, jsonpath]")
 	flags.StringVar(&o.SortBy, "sort-by", "name", "[name, count]")
-	o.configFlags.AddFlags(flags)
 
 	return cmd
 }

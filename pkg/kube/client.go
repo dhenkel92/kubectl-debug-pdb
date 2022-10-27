@@ -20,10 +20,10 @@ type Interface interface {
 
 type Clients struct {
 	clientset kubernetes.Interface
-	conf      *genericclioptions.ConfigFlags
+	conf      genericclioptions.RESTClientGetter
 }
 
-func New(conf *genericclioptions.ConfigFlags) (Interface, error) {
+func New(conf genericclioptions.RESTClientGetter) (Interface, error) {
 	restConfig, err := conf.ToRESTConfig()
 	if err != nil {
 		return nil, err

@@ -21,7 +21,7 @@ import (
 type CreatePDBOptions struct {
 	genericclioptions.IOStreams
 
-	configFlags *genericclioptions.ConfigFlags
+	configFlags genericclioptions.RESTClientGetter
 	namespace   string
 	output      string
 	dryRun      bool
@@ -37,10 +37,10 @@ type CreatePDBOptions struct {
 	clients kube.Interface
 }
 
-func NewCreatePDBOptions(streams genericclioptions.IOStreams) *CreatePDBOptions {
+func NewCreatePDBOptions(streams genericclioptions.IOStreams, conf genericclioptions.RESTClientGetter) *CreatePDBOptions {
 	return &CreatePDBOptions{
 		IOStreams:   streams,
-		configFlags: genericclioptions.NewConfigFlags(true),
+		configFlags: conf,
 	}
 }
 
@@ -161,8 +161,8 @@ func (o *CreatePDBOptions) Run() error {
 	return nil
 }
 
-func NewCmdCreatePDB(streams genericclioptions.IOStreams) *cobra.Command {
-	o := NewCreatePDBOptions(streams)
+func NewCmdCreatePDB(streams genericclioptions.IOStreams, conf genericclioptions.RESTClientGetter) *cobra.Command {
+	o := NewCreatePDBOptions(streams, conf)
 
 	cmd := &cobra.Command{
 		Use: "create",
@@ -194,7 +194,6 @@ func NewCmdCreatePDB(streams genericclioptions.IOStreams) *cobra.Command {
 	flags.StringVar(&o.minAvailStr, "min-avail", "", "Minimum amount of available pods. Will be 1 if nothing else was set.")
 	flags.StringVar(&o.maxUnavailStr, "max-unavail", "", "Maximum amount of unavailable Pods.")
 	flags.BoolVar(&o.dryRun, "dry-run", false, "If set to true, it will only print the object, without sending it.")
-	o.configFlags.AddFlags(flags)
 
 	return cmd
 }
