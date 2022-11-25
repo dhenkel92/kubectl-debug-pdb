@@ -13,11 +13,17 @@ func main() {
 	flags := pflag.NewFlagSet("kubectl-pdb", pflag.ExitOnError)
 	pflag.CommandLine = flags
 
+	conf := genericclioptions.NewConfigFlags(true)
+	conf.AddFlags(flags)
+
+	streams := genericclioptions.IOStreams{In: os.Stdin, Out: os.Stdout, ErrOut: os.Stderr}
+
 	rootCmd := &cobra.Command{
 		Use:   "pdb",
 		Short: "Utility to work with pod disruption budgets",
 	}
-	rootCmd.AddCommand(cmd.NewCmdPdb(genericclioptions.IOStreams{In: os.Stdin, Out: os.Stdout, ErrOut: os.Stderr}))
+	rootCmd.AddCommand(cmd.NewCmdPdb(streams, conf))
+	rootCmd.AddCommand(cmd.NewCmdCreatePDB(streams, conf))
 
 	if err := rootCmd.Execute(); err != nil {
 		os.Exit(1)
