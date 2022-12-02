@@ -125,7 +125,8 @@ func (o *PDBOptions) Run() error {
 	for ns, podLst := range pods {
 		podPDBs, ok := pdbs[ns]
 		if !ok {
-			continue
+			// In case there are no PDBs in a namespace, we still want to print the information for the pods
+			podPDBs = []policyv1.PodDisruptionBudget{}
 		}
 
 		for _, pod := range podLst {
