@@ -24,6 +24,7 @@ func main() {
 	}
 	rootCmd.AddCommand(cmd.NewCmdPdb(streams, conf))
 	rootCmd.AddCommand(cmd.NewCmdCreatePDB(streams, conf))
+	rootCmd.AddCommand(cmd.NewCmdPods(streams, conf))
 
 	if err := rootCmd.Execute(); err != nil {
 		os.Exit(1)
