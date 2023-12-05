@@ -24,8 +24,8 @@ builds:
       - arm
       - arm64
     goos:
-      # - linux
-      # - windows
+      - linux
+      - windows
       - darwin
 
 archives:
