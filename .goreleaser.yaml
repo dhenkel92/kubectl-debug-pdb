@@ -19,6 +19,10 @@ builds:
     main: ./cmd/kubectl-pdb/kubectl-pdb.go
     id: kubectl-pdb
     binary: kubectl-pdb
+    goarch:
+      - amd64
+      - arm
+      - arm64
     goos:
       - linux
       - windows
@@ -42,19 +46,6 @@ checksum:
   name_template: 'checksums.txt'
 snapshot:
   name_template: "{{ .Tag }}-next"
-brews:
-  - repository:
-      owner: dhenkel92
-      name: homebrew-tap
-      token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
-    folder: Formula
-    name: kubectl-pdb
-    ids:
-      - kubectl-pdb
-    homepage: https://github.com/dhenkel92/kubectl-utils
-    description: Kubernetes kubectl utils
-    test: |
-      system "#{bin}/kubectl-pdb -h"
 changelog:
   sort: asc
   filters:
