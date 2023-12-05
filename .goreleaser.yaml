@@ -24,8 +24,8 @@ builds:
       - arm
       - arm64
     goos:
-      - linux
-      - windows
+      # - linux
+      # - windows
       - darwin
 
 archives:
@@ -42,6 +42,15 @@ archives:
     format_overrides:
       - goos: windows
         format: zip
+brews:
+  - name: kubectl-pdb
+    repository:
+      owner: dhenkel92
+      name: homebrew-tap
+      branch: main
+      pull_request:
+        enabled: true
+
 checksum:
   name_template: 'checksums.txt'
 snapshot:
