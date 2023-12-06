@@ -16,11 +16,14 @@ import (
 type EvictPodOptions struct {
 	genericclioptions.IOStreams
 
-	configFlags *genericclioptions.ConfigFlags
-	Namespace   string
-	PodName     string
-	DryRun      bool
-	Output      string
+	configFlags        *genericclioptions.ConfigFlags
+	Namespace          string
+	PodName            string
+	DryRun             bool
+	Output             string
+	GracePeriodSeconds int64
+
+	gracePeriod *int64
 }
 
 func NewEvictPodOptions(streams genericclioptions.IOStreams, configFlags *genericclioptions.ConfigFlags) *EvictPodOptions {
@@ -52,6 +55,7 @@ func NewCmdEvictPod(streams genericclioptions.IOStreams, configFlags *genericcli
 
 	cmd.Flags().StringVarP(&o.Output, "output", "o", "json", "Output format. One of: json|yaml")
 	cmd.Flags().BoolVar(&o.DryRun, "dry-run", true, "If true, only print the object that would be sent, without sending it.")
+	cmd.Flags().Int64Var(&o.GracePeriodSeconds, "grace-period-seconds", -1, "Period of time in seconds given to the pod to terminate gracefully. Ignored if negative. Set to 1 for immediate shutdown. Can only be set to 0 when --force is true (force deletion).")
 
 	return cmd
 }
@@ -66,6 +70,11 @@ func (o *EvictPodOptions) Complete(cmd *cobra.Command, args []string) error {
 	o.Namespace, _, err = o.configFlags.ToRawKubeConfigLoader().Namespace()
 	if err != nil {
 		return err
+	}
+
+	o.gracePeriod = nil
+	if o.GracePeriodSeconds >= 0 {
+		o.gracePeriod = &o.GracePeriodSeconds
 	}
 
 	return nil
@@ -120,7 +129,8 @@ func (o *EvictPodOptions) Run() error {
 			Namespace: pod.Namespace,
 		},
 		DeleteOptions: &metav1.DeleteOptions{
-			DryRun: dryRunOpts,
+			DryRun:             dryRunOpts,
+			GracePeriodSeconds: o.gracePeriod,
 		},
 	}
 
