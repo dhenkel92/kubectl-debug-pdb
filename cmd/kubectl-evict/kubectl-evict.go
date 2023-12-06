@@ -7,6 +7,9 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 	"k8s.io/cli-runtime/pkg/genericclioptions"
+
+	// https://krew.sigs.k8s.io/docs/developer-guide/develop/best-practices/
+	_ "k8s.io/client-go/plugin/pkg/client/auth"
 )
 
 func main() {
