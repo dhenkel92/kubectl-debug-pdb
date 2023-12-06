@@ -165,7 +165,8 @@ func NewCmdCreatePDB(streams genericclioptions.IOStreams, conf genericclioptions
 	o := NewCreatePDBOptions(streams, conf)
 
 	cmd := &cobra.Command{
-		Use: "create",
+		Use:   "create",
+		Short: "Create a new PDB for a given workload.",
 		Args: func(cmd *cobra.Command, args []string) error {
 			if len(args) == 0 {
 				return fmt.Errorf("Please pass a pod name")

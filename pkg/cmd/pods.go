@@ -40,9 +40,8 @@ func NewCmdPods(streams genericclioptions.IOStreams, conf *genericclioptions.Con
 	o := NewPodsOptions(streams, conf)
 
 	cmd := &cobra.Command{
-		Use:   "pods [pdb name]",
-		Short: "List pods",
-		Long:  "List pods",
+		Use:   "pods <pdb_name>",
+		Short: "List pods covered by a given PDB",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if err := o.Complete(cmd, args); err != nil {
 				return err

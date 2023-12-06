@@ -154,8 +154,8 @@ func NewCmdPdb(streams genericclioptions.IOStreams, conf genericclioptions.RESTC
 	o := NewPDBOptions(streams, conf)
 
 	cmd := &cobra.Command{
-		Use:   "cover [pod name]",
-		Short: "Shows which PDBs are covering the given workload.",
+		Use:   "cover [pod_name]",
+		Short: "Shows which PDBs are a workload.",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if err := o.Complete(cmd, args); err != nil {
 				return err

@@ -70,10 +70,10 @@ Usage:
 
 Available Commands:
   completion  Generate the autocompletion script for the specified shell
-  cover       Shows which PDBs are covering the given workload.
-  create
+  cover       Shows which PDBs are a workload.
+  create      Create a new PDB for a given workload.
   help        Help about any command
-  pods        List pods
+  pods        List pods covered by a given PDB
 
 Flags:
       --as string                      Username to impersonate for the operation. User could be a regular user or a service account in a namespace.
@@ -106,12 +106,12 @@ kubectl pdb pods <pdb_name>
 
 List all PDBs for all pods of a namespace:
 ```
-kubectl pdb cover -n <namespace>
+kubectl pdb cover -n <namespace> [pod_name]
 ```
 
-List all PDBs for a specific pod:
+Create new PDB:
 ```
-kubectl pdb cover -n <namespace> <pod_name>
+kubectl pdb create <resource_type>/<resource_name> --dry-run -o yaml
 ```
 
 ## Contributing
