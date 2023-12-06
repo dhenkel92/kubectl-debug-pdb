@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/dhenkel92/kubectl-utils/pkg/kube"
-	"github.com/dhenkel92/kubectl-utils/pkg/utils"
+	"github.com/dhenkel92/kubectl-pdb/pkg/kube"
+	"github.com/dhenkel92/kubectl-pdb/pkg/utils"
 	"github.com/liggitt/tabwriter"
 	"github.com/spf13/cobra"
 	policyv1 "k8s.io/api/policy/v1"

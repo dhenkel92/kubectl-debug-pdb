@@ -1,4 +1,4 @@
-module github.com/dhenkel92/kubectl-utils
+module github.com/dhenkel92/kubectl-pdb
 
 go 1.21
 

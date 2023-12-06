@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/dhenkel92/kubectl-utils/pkg/kube"
+	"github.com/dhenkel92/kubectl-pdb/pkg/kube"
 	"github.com/liggitt/tabwriter"
 	"github.com/spf13/cobra"
 	corev1 "k8s.io/api/core/v1"
