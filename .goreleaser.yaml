@@ -27,9 +27,25 @@ builds:
       - linux
       - windows
       - darwin
+  - env:
+      - CGO_ENABLED=0
+    main: ./cmd/kubectl-evict/kubectl-evict.go
+    id: kubectl-evict
+    binary: kubectl-evict
+    goarch:
+      - amd64
+      - arm
+      - arm64
+    goos:
+      - linux
+      - windows
+      - darwin
 
 archives:
-  - format: tar.gz
+  - id: kubectl-pdb
+    builds:
+      - kubectl-pdb
+    format: tar.gz
     # this name template makes the OS and Arch compatible with the results of `uname`.
     name_template: >-
       {{ .ProjectName }}_
@@ -42,8 +58,38 @@ archives:
     format_overrides:
       - goos: windows
         format: zip
+  - id: kubectl-evict
+    builds:
+      - kubectl-evict
+    format: tar.gz
+    # this name template makes the OS and Arch compatible with the results of `uname`.
+    name_template: >-
+      {{ .Binary }}_
+      {{- title .Os }}_
+      {{- if eq .Arch "amd64" }}x86_64
+      {{- else if eq .Arch "386" }}i386
+      {{- else }}{{ .Arch }}{{ end }}
+      {{- if .Arm }}v{{ .Arm }}{{ end }}
+    # use zip for windows archives
+    format_overrides:
+      - goos: windows
+        format: zip
 brews:
   - name: kubectl-pdb
+    ids:
+      - kubectl-pdb
+    folder: Formula
+    homepage: "https://github.com/dhenkel92/kubectl-pdb"
+    license: "MIT"
+    repository:
+      owner: dhenkel92
+      name: homebrew-tap
+      branch: main
+      pull_request:
+        enabled: true
+  - name: kubectl-evict
+    ids:
+      - kubectl-evict
     folder: Formula
     homepage: "https://github.com/dhenkel92/kubectl-pdb"
     license: "MIT"
