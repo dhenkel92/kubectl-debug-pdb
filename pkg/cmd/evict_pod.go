@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/dhenkel92/kubectl-utils/pkg/kube"
+	"github.com/dhenkel92/kubectl-pdb/pkg/kube"
 	"github.com/spf13/cobra"
 	policyv1 "k8s.io/api/policy/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -99,6 +99,11 @@ func (o *EvictPodOptions) Run() error {
 		return err
 	}
 
+	pod, err := kubeClient.GetClientset().CoreV1().Pods(o.Namespace).Get(ctx, o.PodName, metav1.GetOptions{})
+	if err != nil {
+		return err
+	}
+
 	dryRunOpts := []string{}
 	if o.DryRun {
 		dryRunOpts = append(dryRunOpts, "All")
@@ -110,8 +115,8 @@ func (o *EvictPodOptions) Run() error {
 			APIVersion: policyv1.SchemeGroupVersion.String(),
 		},
 		ObjectMeta: metav1.ObjectMeta{
-			Name:      o.PodName,
-			Namespace: o.Namespace,
+			Name:      pod.Name,
+			Namespace: pod.Namespace,
 		},
 		DeleteOptions: &metav1.DeleteOptions{
 			DryRun: dryRunOpts,
