@@ -97,7 +97,7 @@ func (o *CreatePDBOptions) Complete(cmd *cobra.Command, args []string) error {
 		o.maxUnavail = utils.StrToIntOrString(o.maxUnavailStr)
 	}
 	if o.maxUnavail == nil && o.minAvail == nil {
-		o.minAvail = utils.StrToIntOrString("1")
+		o.maxUnavail = utils.StrToIntOrString("1")
 	}
 
 	return nil
