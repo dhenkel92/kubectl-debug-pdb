@@ -4,6 +4,7 @@ repos:
     hooks:
 #      - id: check-added-large-files
       - id: check-yaml
+        exclude: ^.krew.yaml$
       - id: end-of-file-fixer
       - id: trailing-whitespace
   - repo: https://github.com/dnephin/pre-commit-golang.git

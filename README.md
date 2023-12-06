@@ -49,6 +49,7 @@ To get a local copy up and running follow these simple example steps.
 
 You can install the tool via Homebrew and the tap repository can be found [here.](https://github.com/dhenkel92/homebrew-tap)
 ```
+brew update
 brew install dhenkel92/homebrew-tap/kubectl-pdb
 brew install dhenkel92/homebrew-tap/kubectl-evict
 ```
