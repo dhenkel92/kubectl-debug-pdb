@@ -16,39 +16,39 @@ spec:
   # 'platforms' specify installation methods for various platforms (os/arch)
   # See all supported platforms below.
   platforms:
-    - selector:
+  - selector:
       matchLabels:
         os: darwin
         arch: arm64
     {{addURIAndSha "https://github.com/dhenkel92/kubectl-pdb/releases/download/{{ .TagName }}/kubectl-pdb_Darwin_arm64.tar.gz" .TagName }}
     bin: kubectl-pdb
-    - selector:
+  - selector:
       matchLabels:
         os: darwin
         arch: amd64
     {{addURIAndSha "https://github.com/dhenkel92/kubectl-pdb/releases/download/{{ .TagName }}/kubectl-pdb_Darwin_x86_64.tar.gz" .TagName }}
     bin: kubectl-pdb
-    - selector:
+  - selector:
       matchLabels:
         os: linux
         arch: arm64
     {{addURIAndSha "https://github.com/dhenkel92/kubectl-pdb/releases/download/{{ .TagName }}/kubectl-pdb_Linux_arm64.tar.gz" .TagName }}
     bin: kubectl-pdb
-    - selector:
+  - selector:
       matchLabels:
         os: linux
         arch: amd64
     {{addURIAndSha "https://github.com/dhenkel92/kubectl-pdb/releases/download/{{ .TagName }}/kubectl-pdb_Linux_x86_64.tar.gz" .TagName }}
     bin: kubectl-pdb
-    - selector:
+  - selector:
       matchLabels:
         os: windows
         arch: arm64
     {{addURIAndSha "https://github.com/dhenkel92/kubectl-pdb/releases/download/{{ .TagName }}/kubectl-pdb_Windows_arm64.zip" .TagName }}
-    bin: kubectl-pdb
-    - selector:
+    bin: kubectl-pdb.exe
+  - selector:
       matchLabels:
-        os: linux
+        os: windows
         arch: amd64
     {{addURIAndSha "https://github.com/dhenkel92/kubectl-pdb/releases/download/{{ .TagName }}/kubectl-pdb_Windows_x86_64.zip" .TagName }}
-    bin: kubectl-pdb
+    bin: kubectl-pdb.exe
