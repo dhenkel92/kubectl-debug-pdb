@@ -37,7 +37,7 @@ func NewCmdEvictPod(streams genericclioptions.IOStreams, configFlags *genericcli
 	o := NewEvictPodOptions(streams, configFlags)
 
 	cmd := &cobra.Command{
-		Use:   "pod <pod_name>",
+		Use:   "evict <pod_name>",
 		Short: "Utility to evict a pod from a node",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if err := o.Complete(cmd, args); err != nil {
