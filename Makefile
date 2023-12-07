@@ -1,10 +1,10 @@
 ARGS=
 
 .PHONY: build
-build: kubectl-pdb
+build: kubectl-debug-pdb
 
-kubectl-pdb:
-	go build -o bin/kubectl-pdb ./cmd/kubectl-pdb/kubectl-pdb.go
+kubectl-debug-pdb:
+	go build -o bin/kubectl-debug-pdb ./cmd/kubectl-debug-pdb/kubectl-debug-pdb.go
 
 .PHONY: test
 test:
@@ -12,4 +12,4 @@ test:
 
 .PHONY: run
 run:
-	go run ./cmd/kubectl-pdb/ ${ARGS}
+	go run ./cmd/kubectl-debug-pdb/ ${ARGS}

@@ -50,19 +50,19 @@ To get a local copy up and running follow these simple example steps.
 You can install the tool via Homebrew and the tap repository can be found [here.](https://github.com/dhenkel92/homebrew-tap)
 ```
 brew update
-brew install dhenkel92/homebrew-tap/kubectl-pdb
+brew install dhenkel92/homebrew-tap/kubectl-debug-pdb
 brew install dhenkel92/homebrew-tap/kubectl-evict
 ```
 
 In order to get a newer version, just upgrade via Homebrew
 ```
-brew upgrade kubectl-pdb
+brew upgrade kubectl-debug-pdb
 brew upgrade kubectl-evict
 ```
 
 ### Other distributions
 
-See the [Releases page](https://github.com/dhenkel92/kubectl-pdb/releases) for a list of Peek packages for various distributions.
+See the [Releases page](https://github.com/dhenkel92/kubectl-debug-pdb/releases) for a list of Peek packages for various distributions.
 
 ## Usage
 
@@ -176,4 +176,4 @@ kubectl evict pod [-n <namespace>] <pod_name> --dry-run=false
 
 ## License
 
-Distributed under the MIT License. See [LICENSE](https://github.com/dhenkel92/kubectl-pdb/blob/main/LICENSE) for more information.
+Distributed under the MIT License. See [LICENSE](https://github.com/dhenkel92/kubectl-debug-pdb/blob/main/LICENSE) for more information.

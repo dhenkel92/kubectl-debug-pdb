@@ -3,7 +3,7 @@ package main
 import (
 	"os"
 
-	"github.com/dhenkel92/kubectl-pdb/pkg/cmd"
+	"github.com/dhenkel92/kubectl-debug-pdb/pkg/cmd"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 	"k8s.io/cli-runtime/pkg/genericclioptions"
@@ -13,7 +13,7 @@ import (
 )
 
 func main() {
-	flags := pflag.NewFlagSet("kubectl-pdb", pflag.ExitOnError)
+	flags := pflag.NewFlagSet("kubectl-debug-pdb", pflag.ExitOnError)
 	pflag.CommandLine = flags
 
 	conf := genericclioptions.NewConfigFlags(true)
@@ -22,7 +22,7 @@ func main() {
 	streams := genericclioptions.IOStreams{In: os.Stdin, Out: os.Stdout, ErrOut: os.Stderr}
 
 	rootCmd := &cobra.Command{
-		Use:   "pdb",
+		Use:   "debug-pdb",
 		Short: "Utility to work with pod disruption budgets",
 	}
 	rootCmd.AddCommand(cmd.NewCmdPdb(streams, conf))

@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/dhenkel92/kubectl-pdb/pkg/kube"
-	"github.com/dhenkel92/kubectl-pdb/pkg/utils"
+	"github.com/dhenkel92/kubectl-debug-pdb/pkg/kube"
+	"github.com/dhenkel92/kubectl-debug-pdb/pkg/utils"
 	"github.com/spf13/cobra"
 	policyv1 "k8s.io/api/policy/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
