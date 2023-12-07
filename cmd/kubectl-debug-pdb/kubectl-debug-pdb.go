@@ -28,6 +28,7 @@ func main() {
 	rootCmd.AddCommand(cmd.NewCmdPdb(streams, conf))
 	rootCmd.AddCommand(cmd.NewCmdCreatePDB(streams, conf))
 	rootCmd.AddCommand(cmd.NewCmdPods(streams, conf))
+	rootCmd.AddCommand(cmd.NewCmdEvictPod(streams, conf))
 
 	if err := rootCmd.Execute(); err != nil {
 		os.Exit(1)
