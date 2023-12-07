@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/dhenkel92/kubectl-pdb/pkg/kube"
-	printerUtils "github.com/dhenkel92/kubectl-pdb/pkg/printer"
+	"github.com/dhenkel92/kubectl-debug-pdb/pkg/kube"
+	printerUtils "github.com/dhenkel92/kubectl-debug-pdb/pkg/printer"
 	"github.com/spf13/cobra"
 	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"

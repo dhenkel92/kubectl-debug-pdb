@@ -16,9 +16,9 @@ before:
 builds:
   - env:
       - CGO_ENABLED=0
-    main: ./cmd/kubectl-pdb/kubectl-pdb.go
-    id: kubectl-pdb
-    binary: kubectl-pdb
+    main: ./cmd/kubectl-debug-pdb/kubectl-debug-pdb.go
+    id: kubectl-debug-pdb
+    binary: kubectl-debug-pdb
     goarch:
       - amd64
       - arm
@@ -42,9 +42,9 @@ builds:
       - darwin
 
 archives:
-  - id: kubectl-pdb
+  - id: kubectl-debug-pdb
     builds:
-      - kubectl-pdb
+      - kubectl-debug-pdb
     format: tar.gz
     # this name template makes the OS and Arch compatible with the results of `uname`.
     name_template: >-
@@ -75,11 +75,11 @@ archives:
       - goos: windows
         format: zip
 brews:
-  - name: kubectl-pdb
+  - name: kubectl-debug-pdb
     ids:
-      - kubectl-pdb
+      - kubectl-debug-pdb
     folder: Formula
-    homepage: "https://github.com/dhenkel92/kubectl-pdb"
+    homepage: "https://github.com/dhenkel92/kubectl-debug-pdb"
     license: "MIT"
     repository:
       owner: dhenkel92
@@ -91,7 +91,7 @@ brews:
     ids:
       - kubectl-evict
     folder: Formula
-    homepage: "https://github.com/dhenkel92/kubectl-pdb"
+    homepage: "https://github.com/dhenkel92/kubectl-debug-pdb"
     license: "MIT"
     repository:
       owner: dhenkel92

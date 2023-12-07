@@ -3,7 +3,7 @@ package kube
 import (
 	"context"
 
-	"github.com/dhenkel92/kubectl-pdb/pkg/utils"
+	"github.com/dhenkel92/kubectl-debug-pdb/pkg/utils"
 	policyv1 "k8s.io/api/policy/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
