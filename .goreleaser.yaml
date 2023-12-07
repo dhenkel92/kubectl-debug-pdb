@@ -8,6 +8,7 @@
 
 version: 1
 
+project_name: kubectl-debug-pdb
 before:
   hooks:
     # You may remove this if you don't use go modules.
@@ -18,7 +19,7 @@ builds:
       - CGO_ENABLED=0
     main: ./cmd/kubectl-debug-pdb/kubectl-debug-pdb.go
     id: kubectl-debug-pdb
-    binary: kubectl-debug-pdb
+    binary: kubectl-debug_pdb
     goarch:
       - amd64
       - arm

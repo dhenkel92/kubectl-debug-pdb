@@ -4,7 +4,7 @@ ARGS=
 build: kubectl-debug-pdb
 
 kubectl-debug-pdb:
-	go build -o bin/kubectl-debug-pdb ./cmd/kubectl-debug-pdb/kubectl-debug-pdb.go
+	go build -o bin/kubectl-debug_pdb ./cmd/kubectl-debug-pdb/kubectl-debug-pdb.go
 
 .PHONY: test
 test:
