@@ -41,15 +41,24 @@ To get a local copy up and running follow these simple example steps.
 
 ### Installation
 
+### Krew
+
+If you have [Krew](https://krew.sigs.k8s.io/), the `kubectl` plugin manager, installed:
+``` sh
+kubectl krew install debug-pdb
+```
+
+The Krew manifest can be found [here](https://github.com/kubernetes-sigs/krew-index/blob/master/plugins/debug-pdb.yaml).
+
 ### MacOS
 
 You can install the tool via Homebrew and the tap repository can be found [here.](https://github.com/dhenkel92/homebrew-tap)
-```
+```sh
 brew update && brew install dhenkel92/homebrew-tap/kubectl-debug-pdb
 ```
 
 In order to get a newer version, just upgrade via Homebrew
-```
+```sh
 brew update && brew upgrade dhenkel92/homebrew-tap/kubectl-debug-pdb
 ```
 
