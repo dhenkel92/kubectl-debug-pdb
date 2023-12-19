@@ -72,5 +72,3 @@ jobs:
       - name: Update new version in krew-index
         uses: rajatjindal/krew-release-bot@v0.0.46
         if: ${{ startsWith(github.ref, 'refs/tags/') }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
